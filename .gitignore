@@ -1,0 +1,14 @@
+pycache/
+*.pyc
+*.pyo
+*.pyd
+*.env
+.env
+venv/
+.venv/
+*.sqlite3
+attendance.db
+*.egg-info/
+dist/
+build/
+rest/
