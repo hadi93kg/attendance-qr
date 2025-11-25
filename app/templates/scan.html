@@ -2,17 +2,19 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <title>Scan</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Scan - QR Attendance</title>
   <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-  <h2>Scan detected</h2>
-  <p>If you scanned the general attendance QR, please enter your user ID to mark attendance:</p>
-  <form action="/attendance/mark" method="get">
-    <input name="user_id" placeholder="Your user id">
-    <button type="submit">Mark Attendance</button>
-  </form>
-  <p>Or if you have a personal QR, scan it directly to mark attendance.</p>
+
+  <h1>Scan Page</h1>
+
+  <p class="center">Scan your personal QR code to mark attendance.</p>
+
+  <div class="center">
+    <a href="/dashboard" class="btn">Dashboard</a>
+  </div>
+
 </body>
 </html>
