@@ -42,6 +42,7 @@ python app.py
 
 http://127.0.0.1:5000
 
+RENDER link : https://attendance-qr-1-gluu.onrender.com
 
 ---
 
@@ -164,6 +165,7 @@ python app.py
 http://127.0.0.1:5000
 
 
+RENDER link : https://attendance-qr-1-gluu.onrender.com
 ---
 
 📂 ساختار فایل‌ها
@@ -246,3 +248,4 @@ SQLite
 📄 لایسنس
 
 امکان درج MIT یا Apache 2.0 در صورت نیاز.
+
