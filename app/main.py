@@ -1,32 +1,31 @@
 # app/main.py
 import os
-from datetime import datetime
 from fastapi import FastAPI, Request, Depends, HTTPException, Form
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine, Base
-from app.models import User, Attendance
-from app.utils.qr_generator import generate_qr
+from models import User, Attendance
+from utils.qr_generator import generate_qr
+from datetime import datetime
 
-# create tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="QR Attendance System")
 
-# static & templates
+# Static & templates
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
 
-# uploads dir
+# uploads directory
 UPLOAD_DIR = "app/static/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-# get public base url from env (set this on Render), fallback localhost
+# BASE URL (set this in Render environment variables)
 BASE_URL = os.getenv("BASE_URL", "http://127.0.0.1:10000")
 
-# ensure attendance QR exists on startup (small QR on homepage)
+# Ensure attendance QR exists on startup
 @app.on_event("startup")
 def startup_qr():
     qr_path = os.path.join(UPLOAD_DIR, "attendance_qr.png")
@@ -37,7 +36,7 @@ def startup_qr():
     else:
         print("QR already exists at", qr_path)
 
-# dependency
+# DB dependency
 def get_db():
     db = SessionLocal()
     try:
@@ -45,37 +44,36 @@ def get_db():
     finally:
         db.close()
 
-# home page (shows small QR)
+# Home page
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
     qr_rel = "/static/uploads/attendance_qr.png"
     return templates.TemplateResponse("index.html", {"request": request, "qr_url": qr_rel})
 
-# scan landing page
+# Scan landing
 @app.get("/scan", response_class=HTMLResponse)
 def scan_landing(request: Request):
     return templates.TemplateResponse("scan.html", {"request": request})
 
-# endpoint to mark attendance by user_id
-@app.get("/attendance/mark/{user_id}")
-def mark_attendance_get(user_id: int, db: Session = Depends(get_db)):
+# Mark attendance
+@app.get("/attendance/mark/{user_id}", response_class=HTMLResponse)
+def mark_attendance(user_id: int, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    timestamp = datetime.now()
-    attendance = Attendance(user_id=user_id, timestamp=timestamp)
+        return {"message": "User not found"}
+    attendance = Attendance(user_id=user_id, timestamp=datetime.now())
     db.add(attendance)
     db.commit()
-    return JSONResponse(content={"message": f"Attendance marked for {user.name}", "time": timestamp.strftime("%Y-%m-%d %H:%M:%S")})
+    return templates.TemplateResponse("result.html", {"request": Request, "user": user, "timestamp": attendance.timestamp})
 
-# dashboard
+# Dashboard
 @app.get("/dashboard", response_class=HTMLResponse)
 def dashboard(request: Request, db: Session = Depends(get_db)):
     users = db.query(User).all()
     counts = {u.id: db.query(Attendance).filter(Attendance.user_id == u.id).count() for u in users}
     return templates.TemplateResponse("dashboard.html", {"request": request, "users": users, "counts": counts})
 
-# add user (form submission)
+# Add user
 @app.post("/user/add")
 def add_user(name: str = Form(...), db: Session = Depends(get_db)):
     user = User(name=name)
@@ -83,7 +81,7 @@ def add_user(name: str = Form(...), db: Session = Depends(get_db)):
     db.commit()
     db.refresh(user)
 
-    # generate QR for user pointing to attendance mark
+    # generate QR
     qr_filename = f"user_{user.id}.png"
     qr_path = os.path.join(UPLOAD_DIR, qr_filename)
     user_mark_url = f"{BASE_URL}/attendance/mark/{user.id}"

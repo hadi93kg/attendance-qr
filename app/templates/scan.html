@@ -2,19 +2,16 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Scan</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Scan</title>
   <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-
-  <h1>Scan Page</h1>
-
-  <p class="center">Scan your personal QR code to mark attendance.</p>
-
-  <div class="center">
-    <a href="/dashboard" class="btn">Dashboard</a>
-  </div>
-
+  <h1>Scan QR to mark attendance</h1>
+  <p>Use a QR scanner or enter user ID manually:</p>
+  <form action="/attendance/mark/" method="get">
+    <input name="user_id" placeholder="User ID" required>
+    <button type="submit">Mark Attendance</button>
+  </form>
 </body>
 </html>

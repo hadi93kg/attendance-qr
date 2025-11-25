@@ -2,43 +2,37 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Dashboard</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dashboard</title>
   <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-
   <h1>Dashboard</h1>
-
-  <h3>Add New User</h3>
-  <form action="/user/add" method="post" class="add-form">
+  <h3>Add user</h3>
+  <form action="/user/add" method="post">
     <input name="name" placeholder="Full name" required>
     <button type="submit">Add</button>
   </form>
 
-  <h3>Users</h3>
-
+  <h3>Users & Attendance</h3>
   <table>
     <thead>
-      <tr>
-        <th>ID</th><th>Name</th><th>Attendance</th><th>QR</th>
-      </tr>
+      <tr><th>ID</th><th>Name</th><th>Attendance Count</th><th>QR</th></tr>
     </thead>
     <tbody>
       {% for u in users %}
-      <tr>
-        <td>{{ u.id }}</td>
-        <td>{{ u.name }}</td>
-        <td>{{ counts[u.id] }}</td>
-        <td>
-          {% if u.qr_code_path %}
-          <a href="{{ u.qr_code_path }}" target="_blank">QR</a>
-          {% else %}-{% endif %}
-        </td>
-      </tr>
+        <tr>
+          <td>{{ u.id }}</td>
+          <td>{{ u.name }}</td>
+          <td>{{ counts[u.id] }}</td>
+          <td>
+            {% if u.qr_code_path %}
+              <a href="{{ u.qr_code_path }}" target="_blank">QR</a>
+            {% else %}-{% endif %}
+          </td>
+        </tr>
       {% endfor %}
     </tbody>
   </table>
-
 </body>
 </html>

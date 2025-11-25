@@ -2,22 +2,14 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>QR Attendance</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>QR Attendance</title>
   <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-
-  <h1>Attendance System</h1>
-
-  <div class="center">
-    <p>Scan QR below to open attendance page:</p>
-    <img src="{{ qr_url }}" class="main-qr">
-  </div>
-
-  <div class="center">
-    <a href="/dashboard" class="btn">Go to Dashboard</a>
-  </div>
-
+  <h1>Welcome to QR Attendance System</h1>
+  <img src="{{ qr_url }}" alt="Attendance QR" class="qr-small">
+  <p>Scan this QR with your mobile to mark attendance</p>
+  <a href="/dashboard"><button>Go to Dashboard</button></a>
 </body>
 </html>
