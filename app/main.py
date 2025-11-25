@@ -1,4 +1,7 @@
 # app/main.py
+import sys
+import os
+sys.path.append(os.path.dirname(file))
 import os
 from fastapi import FastAPI, Request, Depends, HTTPException, Form
 from fastapi.responses import HTMLResponse
