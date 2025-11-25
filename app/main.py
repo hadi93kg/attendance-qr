@@ -26,9 +26,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 BASE_URL = os.getenv("BASE_URL", "https://attendance-qr-1-gluu.onrender.com")
 
 
-# -------------------------
-# Auto-generate general attendance QR
-# -------------------------
+
 @app.on_event("startup")
 def startup_qr():
     qr_path = os.path.join(UPLOAD_DIR, "attendance_qr.png")
@@ -47,26 +45,19 @@ def get_db():
         db.close()
 
 
-# -------------------------
-# Home Page
-# -------------------------
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
     qr_rel = "/static/uploads/attendance_qr.png"
     return templates.TemplateResponse("index.html", {"request": request, "qr_url": qr_rel})
 
 
-# -------------------------
-# Scan Landing Page
-# -------------------------
+
 @app.get("/scan", response_class=HTMLResponse)
 def scan_landing(request: Request):
     return templates.TemplateResponse("scan.html", {"request": request})
 
 
-# -------------------------
-# Mark Attendance (GET — for QR scan)
-# -------------------------
+
 @app.get("/attendance/mark/{user_id}")
 def mark_attendance_get(user_id: int, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.id == user_id).first()
@@ -81,9 +72,7 @@ def mark_attendance_get(user_id: int, db: Session = Depends(get_db)):
     return {"message": f"Attendance marked for {user.name}"}
 
 
-# -------------------------
-# Dashboard
-# -------------------------
+
 @app.get("/dashboard", response_class=HTMLResponse)
 def dashboard(request: Request, db: Session = Depends(get_db)):
     users = db.query(User).all()
@@ -95,9 +84,7 @@ def dashboard(request: Request, db: Session = Depends(get_db)):
     )
 
 
-# -------------------------
-# Add User (Form POST)
-# -------------------------
+
 @app.post("/user/add")
 def add_user(name: str = Form(...), db: Session = Depends(get_db)):
     user = User(name=name)
