@@ -1,10 +1,13 @@
 # app/utils/qr_generator.py
 import qrcode
+import os
 
-def generate_qr(data, filename, size=300):
-    qr = qrcode.QRCode(box_size=10, border=2)
-    qr.add_data(data)
-    qr.make(fit=True)
-    img = qr.make_image(fill_color="black", back_color="white")
-    img = img.resize((size, size))
-    img.save(filename)
+def generate_qr(data, path):
+    # Make sure the directory exists
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+
+    # Create QR code image
+    img = qrcode.make(data)
+
+    # Save image to file
+    img.save(path)
