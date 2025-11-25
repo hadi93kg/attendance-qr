@@ -23,7 +23,7 @@ UPLOAD_DIR = "app/static/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # get public base url from Render
-BASE_URL = os.getenv("BASE_URL", "http://127.0.0.1:10000")
+BASE_URL = os.getenv("BASE_URL", "https://attendance-qr-1-gluu.onrender.com")
 
 
 # -------------------------
