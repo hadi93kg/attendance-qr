@@ -8,8 +8,16 @@
 </head>
 <body>
   <h1 style="color:#2e7d32;">✅ Attendance Marked</h1>
-  <p>User: {{ user.name }}</p>
-  <p>Time: {{ timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+
+  <p>User: <strong>{{ user.name }}</strong></p>
+
+  <p>
+    Time: 
+    <strong>
+      {{ timestamp.strftime("%Y-%m-%d %H:%M:%S") if timestamp else "" }}
+    </strong>
+  </p>
+
   <a href="/dashboard"><button>Back to Dashboard</button></a>
 </body>
 </html>
