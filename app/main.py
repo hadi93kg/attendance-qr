@@ -10,6 +10,9 @@ from models import User, Attendance
 from utils.qr_generator import generate_qr
 from datetime import datetime
 
+from app.models import User, Attendance
+from app.utils.qr_generator import generate_qr
+
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="QR Attendance System")
